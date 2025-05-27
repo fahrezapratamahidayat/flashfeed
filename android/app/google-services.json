@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "480008751825",
+    "project_id": "flashfeed-7e783",
+    "storage_bucket": "flashfeed-7e783.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480008751825:android:300ca4cd523c34a65593f0",
+        "android_client_info": {
+          "package_name": "com.example.flashfeed"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzp0wfbHR18OQSbP8qBK7GixQvn2-33V8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
