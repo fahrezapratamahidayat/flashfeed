@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 class AppColors {
   // Light Theme Colors (dari :root CSS)
   static const Color lightBackground = Color(
