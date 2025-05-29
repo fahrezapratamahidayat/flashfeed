@@ -1,3 +1,4 @@
+import 'package:flashfeed/src/presentation/pages/articel_detail_screen.dart';
 import 'package:flashfeed/src/presentation/pages/forgot_password_screen.dart';
 import 'package:flashfeed/src/presentation/pages/home_screen.dart';
 import 'package:flashfeed/src/presentation/pages/introduction_screen.dart';
@@ -5,7 +6,6 @@ import 'package:flashfeed/src/presentation/pages/login_screen.dart';
 import 'package:flashfeed/src/presentation/pages/not_found_screen.dart';
 import 'package:flashfeed/src/presentation/pages/register_screen.dart';
 import 'package:flashfeed/src/presentation/pages/splash_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -29,9 +29,13 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => RegisterScreen());
       case forgotPassword:
         return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
-
       case home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+      case articleDetail:
+        final articleId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => ArticleDetailPage(articleId: articleId),
+        );
       default:
         return MaterialPageRoute(builder: (_) => NotFoundScreen());
     }
