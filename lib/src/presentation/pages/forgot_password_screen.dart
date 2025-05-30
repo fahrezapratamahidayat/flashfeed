@@ -1,5 +1,5 @@
-import 'package:flashfeed/src/presentation/widgets/app_button.dart';
-import 'package:flashfeed/src/presentation/widgets/app_text_field.dart';
+import 'package:flashfeed/src/presentation/widgets/button.dart';
+import 'package:flashfeed/src/presentation/widgets/text_field.dart';
 import 'package:flashfeed/src/presentation/widgets/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
