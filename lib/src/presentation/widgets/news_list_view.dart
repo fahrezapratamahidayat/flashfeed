@@ -60,10 +60,7 @@ class _NewsListViewState extends State<NewsListView> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = e.toString().replaceFirst(
-          "Exception: ",
-          "",
-        ); // Hapus prefix "Exception: "
+        _errorMessage = e.toString().replaceFirst("Exception: ", "");
         _currentState = NewsListStateValue.error;
       });
     }
@@ -124,10 +121,6 @@ class _NewsListViewState extends State<NewsListView> {
         return RefreshIndicator(
           onRefresh: () => _fetchNewsData(widget.apiUrl),
           child: ListView.builder(
-            padding: const EdgeInsets.only(
-              top: 8.0,
-              bottom: 8.0,
-            ), // Beri padding atas bawah untuk list
             itemCount: _articles.length,
             itemBuilder: (context, index) {
               return NewsListItem(article: _articles[index]);
