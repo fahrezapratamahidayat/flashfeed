@@ -1,6 +1,6 @@
 import 'package:flashfeed/src/config/app_routes.dart';
-import 'package:flashfeed/src/presentation/widgets/app_text_field.dart';
-import 'package:flashfeed/src/presentation/widgets/app_button.dart';
+import 'package:flashfeed/src/presentation/widgets/text_field.dart';
+import 'package:flashfeed/src/presentation/widgets/button.dart';
 import 'package:flashfeed/src/presentation/widgets/app_text.dart';
 import 'package:flashfeed/src/presentation/widgets/spacing.dart';
 import 'package:flutter/material.dart';
