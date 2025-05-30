@@ -1,6 +1,7 @@
 import 'package:flashfeed/src/config/app_routes.dart';
-import 'package:flashfeed/src/presentation/widgets/app_button.dart';
-import 'package:flashfeed/src/presentation/widgets/app_text_field.dart';
+import 'package:flashfeed/src/presentation/widgets/button.dart';
+import 'package:flashfeed/src/presentation/widgets/app_logo.dart';
+import 'package:flashfeed/src/presentation/widgets/text_field.dart';
 import 'package:flashfeed/src/presentation/widgets/app_text.dart';
 import 'package:flashfeed/src/presentation/widgets/spacing.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +31,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Spacing.vertical(Spacing.xl),
-                      FlutterLogo(size: 50),
+                      AppIcon(height: 56, width: 56),
                       Spacing.vertical(Spacing.md),
                       const AppText(
                         text: 'Let`s Sign In',
