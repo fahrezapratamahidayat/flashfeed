@@ -16,7 +16,7 @@ class NewsListItem extends StatelessWidget {
     const double imageWidth = 150.0;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(
@@ -34,7 +34,7 @@ class NewsListItem extends StatelessWidget {
                 width: imageWidth,
                 height: imageHeight,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6.0),
+                  borderRadius: BorderRadius.circular(12.0),
                   child: Image.network(
                     article.image,
                     fit: BoxFit.cover,
