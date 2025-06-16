@@ -1,4 +1,4 @@
-import 'package:flashfeed/src/data/news_data.dart'; // Pastikan path ini benar
+import 'package:flashfeed/src/data/news_data.dart';
 import 'package:flutter/material.dart';
 
 class NewsCategorySlider extends StatefulWidget {
@@ -74,19 +74,16 @@ class _NewsCategorySliderState extends State<NewsCategorySlider> {
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).textTheme.bodyLarge?.color,
                     backgroundColor: isSelected
-                        ? Theme.of(context).colorScheme.primary.withValues(
-                            alpha: 0.1,
-                          ) // Koreksi: withValues -> withOpacity
+                        ? Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.1)
                         : Colors.transparent,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        8.0,
-                      ), // Sedikit modifikasi radius
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
-                      vertical:
-                          10.0, // Padding vertikal agar tombol tidak terlalu tipis
+                      vertical: 10.0,
                     ),
                   ),
                   onPressed: () {
@@ -100,14 +97,10 @@ class _NewsCategorySliderState extends State<NewsCategorySlider> {
                   },
                   child: Text(category['label']!),
                 ),
-                // Garis bawah yang dianimasikan
                 AnimatedContainer(
-                  duration: const Duration(milliseconds: 250), // Durasi animasi
-                  curve: Curves.easeInOut, // Jenis kurva animasi
-                  height: 3.0, // Ketebalan garis bawah
-                  // Lebar garis bawah akan sama dengan lebar tombol karena Column
-                  // dan TextButton akan menentukan lebar Column.
-                  // Jika isSelected true, lebar akan mengikuti konten, jika false maka 0.
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  height: 3.0,
                   width: isSelected
                       ? (TextPainter(
                           text: TextSpan(
@@ -119,10 +112,9 @@ class _NewsCategorySliderState extends State<NewsCategorySlider> {
                                       : Theme.of(
                                           context,
                                         ).textTheme.bodyLarge?.color,
-                                  fontWeight: FontWeight
-                                      .w500, // Sesuaikan dengan style TextButton
+                                  fontWeight: FontWeight.w500,
                                 ),
-                          ), // Gunakan style yang mirip dengan TextButton
+                          ),
                           maxLines: 1,
                           textDirection: TextDirection.ltr,
                         )..layout()).size.width
@@ -131,13 +123,9 @@ class _NewsCategorySliderState extends State<NewsCategorySlider> {
                     color: isSelected
                         ? Theme.of(context).colorScheme.primary
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(
-                      1.5,
-                    ), // Sudut melengkung untuk garis
+                    borderRadius: BorderRadius.circular(1.5),
                   ),
-                  margin: const EdgeInsets.only(
-                    top: 2.0,
-                  ), // Jarak kecil antara tombol dan garis
+                  margin: const EdgeInsets.only(top: 2.0), //
                 ),
               ],
             ),
