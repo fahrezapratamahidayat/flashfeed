@@ -1,446 +1,404 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class AppColors {
-  // Light Theme Colors (dari :root CSS)
-  static const Color lightBackground = Color(
-    0xFFFFFFFF,
-  ); // --background: #ffffff;
-  static const Color lightForeground = Color(
-    0xFF0F1419,
-  ); // --foreground: #0f1419;
-  static const Color lightCard = Color(0xFFF7F8F8); // --card: #f7f8f8;
-  static const Color lightCardForeground = Color(
-    0xFF0F1419,
-  ); // --card-foreground: #0f1419;
-  static const Color lightPopover = Color(0xFFFFFFFF); // --popover: #ffffff;
-  static const Color lightPopoverForeground = Color(
-    0xFF0F1419,
-  ); // --popover-foreground: #0f1419;
-  static const Color lightPrimary = Color(0xFF1E9DF1); // --primary: #1e9df1;
-  static const Color lightPrimaryForeground = Color(
-    0xFFFFFFFF,
-  ); // --primary-foreground: #ffffff;
-  static const Color lightSecondary = Color(
-    0xFF0F1419,
-  ); // --secondary: #0f1419;
-  static const Color lightSecondaryForeground = Color(
-    0xFFFFFFFF,
-  ); // --secondary-foreground: #ffffff;
-  static const Color lightMuted = Color(0xFFE5E5E6); // --muted: #e5e5e6;
-  static const Color lightMutedForeground = Color(
-    0xFF0F1419,
-  ); // --muted-foreground: #0f1419;
-  static const Color lightAccent = Color(0xFFE3ECF6); // --accent: #e3ecf6;
-  static const Color lightAccentForeground = Color(
-    0xFF1E9DF1,
-  ); // --accent-foreground: #1e9df1;
-  static const Color lightDestructive = Color(
-    0xFFF4212E,
-  ); // --destructive: #f4212e;
-  static const Color lightDestructiveForeground = Color(
-    0xFFFFFFFF,
-  ); // --destructive-foreground: #ffffff;
-  static const Color lightBorder = Color(0xFFE1EAEF); // --border: #e1eaef;
-  static const Color lightInput = Color(0xFFF7F9FA); // --input: #f7f9fa;
-  static const Color lightRing = Color(0xFF1DA1F2); // --ring: #1da1f2;
-  static const Color lightChart1 = Color(0xFF1E9DF1); // --chart-1: #1e9df1;
-  static const Color lightChart2 = Color(0xFF00B87A); // --chart-2: #00b87a;
-  static const Color lightChart3 = Color(0xFFF7B928); // --chart-3: #f7b928;
-  static const Color lightChart4 = Color(0xFF17BF63); // --chart-4: #17bf63;
-  static const Color lightChart5 = Color(0xFFE0245E); // --chart-5: #e0245e;
-  static const Color lightSidebar = Color(0xFFF7F8F8); // --sidebar: #f7f8f8;
-  static const Color lightSidebarForeground = Color(
-    0xFF0F1419,
-  ); // --sidebar-foreground: #0f1419;
-  static const Color lightSidebarPrimary = Color(
-    0xFF1E9DF1,
-  ); // --sidebar-primary: #1e9df1;
-  static const Color lightSidebarPrimaryForeground = Color(
-    0xFFFFFFFF,
-  ); // --sidebar-primary-foreground: #ffffff;
-  static const Color lightSidebarAccent = Color(
-    0xFFE3ECF6,
-  ); // --sidebar-accent: #e3ecf6;
-  static const Color lightSidebarAccentForeground = Color(
-    0xFF1E9DF1,
-  ); // --sidebar-accent-foreground: #1e9df1;
-  static const Color lightSidebarBorder = Color(
-    0xFFE1E8ED,
-  ); // --sidebar-border: #e1e8ed;
-  static const Color lightSidebarRing = Color(
-    0xFF1DA1F2,
-  ); // --sidebar-ring: #1da1f2;
+//==============================================================================
+// PALET WARNA (PILIH SALAH SATU)
+//==============================================================================
 
-  // Dark Theme Colors (dari .dark CSS)
-  static const Color darkBackground = Color(
-    0xFF000000,
-  ); // --background: #000000;
-  static const Color darkForeground = Color(
-    0xFFE7E9EA,
-  ); // --foreground: #e7e9ea;
-  static const Color darkCard = Color(0xFF17181C); // --card: #17181c;
-  static const Color darkCardForeground = Color(
-    0xFFD9D9D9,
-  ); // --card-foreground: #d9d9d9;
-  static const Color darkPopover = Color(0xFF000000); // --popover: #000000;
-  static const Color darkPopoverForeground = Color(
-    0xFFE7E9EA,
-  ); // --popover-foreground: #e7e9ea;
-  static const Color darkPrimary = Color(0xFF1C9CF0); // --primary: #1c9cf0;
-  static const Color darkPrimaryForeground = Color(
-    0xFFFFFFFF,
-  ); // --primary-foreground: #ffffff;
-  static const Color darkSecondary = Color(0xFFF0F3F4); // --secondary: #f0f3f4;
-  static const Color darkSecondaryForeground = Color(
-    0xFF0F1419,
-  ); // --secondary-foreground: #0f1419;
-  static const Color darkMuted = Color(0xFF181818); // --muted: #181818;
-  static const Color darkMutedForeground = Color(
-    0xFF72767A,
-  ); // --muted-foreground: #72767a;
-  static const Color darkAccent = Color(0xFF061622); // --accent: #061622;
-  static const Color darkAccentForeground = Color(
-    0xFF1C9CF0,
-  ); // --accent-foreground: #1c9cf0;
-  static const Color darkDestructive = Color(
-    0xFFF4212E,
-  ); // --destructive: #f4212e;
-  static const Color darkDestructiveForeground = Color(
-    0xFFFFFFFF,
-  ); // --destructive-foreground: #ffffff;
-  static const Color darkBorder = Color(0xFF242628); // --border: #242628;
-  static const Color darkInput = Color(0xFF22303C); // --input: #22303c;
-  static const Color darkRing = Color(0xFF1DA1F2); // --ring: #1da1f2;
-  static const Color darkChart1 = Color(0xFF1E9DF1); // --chart-1: #1e9df1;
-  static const Color darkChart2 = Color(0xFF00B87A); // --chart-2: #00b87a;
-  static const Color darkChart3 = Color(0xFFF7B928); // --chart-3: #f7b928;
-  static const Color darkChart4 = Color(0xFF17BF63); // --chart-4: #17bf63;
-  static const Color darkChart5 = Color(0xFFE0245E); // --chart-5: #e0245e;
-  static const Color darkSidebar = Color(0xFF17181C); // --sidebar: #17181c;
-  static const Color darkSidebarForeground = Color(
-    0xFFD9D9D9,
-  ); // --sidebar-foreground: #d9d9d9;
-  static const Color darkSidebarPrimary = Color(
-    0xFF1DA1F2,
-  ); // --sidebar-primary: #1da1f2;
-  static const Color darkSidebarPrimaryForeground = Color(
-    0xFFFFFFFF,
-  ); // --sidebar-primary-foreground: #ffffff;
-  static const Color darkSidebarAccent = Color(
-    0xFF061622,
-  ); // --sidebar-accent: #061622;
-  static const Color darkSidebarAccentForeground = Color(
-    0xFF1C9CF0,
-  ); // --sidebar-accent-foreground: #1c9cf0;
-  static const Color darkSidebarBorder = Color(
-    0xFF38444D,
-  ); // --sidebar-border: #38444d;
-  static const Color darkSidebarRing = Color(
-    0xFF1DA1F2,
-  ); // --sidebar-ring: #1da1f2;
+// Base class untuk struktur warna yang konsisten
+abstract class AppColorPalette {
+  // Light
+  Color get lightBackground;
+  Color get lightForeground;
+  Color get lightCard;
+  Color get lightCardForeground;
+  Color get lightPopover;
+  Color get lightPopoverForeground;
+  Color get lightPrimary;
+  Color get lightPrimaryForeground;
+  Color get lightSecondary;
+  Color get lightSecondaryForeground;
+  Color get lightMuted;
+  Color get lightMutedForeground;
+  Color get lightAccent;
+  Color get lightAccentForeground;
+  Color get lightDestructive;
+  Color get lightDestructiveForeground;
+  Color get lightBorder;
+  Color get lightInput;
+  Color get lightRing;
+
+  // Dark
+  Color get darkBackground;
+  Color get darkForeground;
+  Color get darkCard;
+  Color get darkCardForeground;
+  Color get darkPopover;
+  Color get darkPopoverForeground;
+  Color get darkPrimary;
+  Color get darkPrimaryForeground;
+  Color get darkSecondary;
+  Color get darkSecondaryForeground;
+  Color get darkMuted;
+  Color get darkMutedForeground;
+  Color get darkAccent;
+  Color get darkAccentForeground;
+  Color get darkDestructive;
+  Color get darkDestructiveForeground;
+  Color get darkBorder;
+  Color get darkInput;
+  Color get darkRing;
 }
 
+/// Palet Warna shadcn/ui - Varian ZINC
+class AppColorsZinc implements AppColorPalette {
+  const AppColorsZinc();
+
+  @override
+  final Color lightBackground = const Color(0xFFFFFFFF);
+  @override
+  final Color lightForeground = const Color(0xFF09090B);
+  @override
+  final Color lightCard = const Color(0xFFFFFFFF);
+  @override
+  final Color lightCardForeground = const Color(0xFF09090B);
+  @override
+  final Color lightPopover = const Color(0xFFFFFFFF);
+  @override
+  final Color lightPopoverForeground = const Color(0xFF09090B);
+  @override
+  final Color lightPrimary = const Color(0xFF18181B);
+  @override
+  final Color lightPrimaryForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color lightSecondary = const Color(0xFFF4F4F5);
+  @override
+  final Color lightSecondaryForeground = const Color(0xFF18181B);
+  @override
+  final Color lightMuted = const Color(0xFFF4F4F5);
+  @override
+  final Color lightMutedForeground = const Color(0xFF71717A);
+  @override
+  final Color lightAccent = const Color(0xFFF4F4F5);
+  @override
+  final Color lightAccentForeground = const Color(0xFF18181B);
+  @override
+  final Color lightDestructive = const Color(0xFFEF4444);
+  @override
+  final Color lightDestructiveForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color lightBorder = const Color(0xFFE4E4E7);
+  @override
+  final Color lightInput = const Color(0xFFE4E4E7);
+  @override
+  final Color lightRing = const Color(0xFF71717A);
+
+  @override
+  final Color darkBackground = const Color(0xFF09090B);
+  @override
+  final Color darkForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color darkCard = const Color(0xFF09090B);
+  @override
+  final Color darkCardForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color darkPopover = const Color(0xFF09090B);
+  @override
+  final Color darkPopoverForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color darkPrimary = const Color(0xFFFAFAFA);
+  @override
+  final Color darkPrimaryForeground = const Color(0xFF18181B);
+  @override
+  final Color darkSecondary = const Color(0xFF27272A);
+  @override
+  final Color darkSecondaryForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color darkMuted = const Color(0xFF27272A);
+  @override
+  final Color darkMutedForeground = const Color(0xFFA1A1AA);
+  @override
+  final Color darkAccent = const Color(0xFF27272A);
+  @override
+  final Color darkAccentForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color darkDestructive = const Color(0xFF7F1D1D);
+  @override
+  final Color darkDestructiveForeground = const Color(0xFFFAFAFA);
+  @override
+  final Color darkBorder = const Color(0xFF27272A);
+  @override
+  final Color darkInput = const Color(0xFF27272A);
+  @override
+  final Color darkRing = const Color(0xFFD4D4D8);
+}
+
+/// Palet Warna shadcn/ui - Varian BLUE
+class AppColorsBlue implements AppColorPalette {
+  const AppColorsBlue(); // Tambahkan const constructor
+
+  @override
+  final Color lightBackground = const Color(0xFFFFFFFF);
+  @override
+  final Color lightForeground = const Color(0xFF020817);
+  @override
+  final Color lightCard = const Color(0xFFFFFFFF);
+  @override
+  final Color lightCardForeground = const Color(0xFF020817);
+  @override
+  final Color lightPopover = const Color(0xFFFFFFFF);
+  @override
+  final Color lightPopoverForeground = const Color(0xFF020817);
+  @override
+  final Color lightPrimary = const Color(0xFF2563EB);
+  @override
+  final Color lightPrimaryForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color lightSecondary = const Color(0xFFF1F5F9);
+  @override
+  final Color lightSecondaryForeground = const Color(0xFF0F172A);
+  @override
+  final Color lightMuted = const Color(0xFFF1F5F9);
+  @override
+  final Color lightMutedForeground = const Color(0xFF64748B);
+  @override
+  final Color lightAccent = const Color(0xFFF1F5F9);
+  @override
+  final Color lightAccentForeground = const Color(0xFF0F172A);
+  @override
+  final Color lightDestructive = const Color(0xFFEF4444);
+  @override
+  final Color lightDestructiveForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color lightBorder = const Color(0xFFE2E8F0);
+  @override
+  final Color lightInput = const Color(0xFFE2E8F0);
+  @override
+  final Color lightRing = const Color(0xFF94A3B8);
+
+  @override
+  final Color darkBackground = const Color(0xFF020817);
+  @override
+  final Color darkForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color darkCard = const Color(0xFF020817);
+  @override
+  final Color darkCardForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color darkPopover = const Color(0xFF020817);
+  @override
+  final Color darkPopoverForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color darkPrimary = const Color(0xFF3B82F6);
+  @override
+  final Color darkPrimaryForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color darkSecondary = const Color(0xFF1E293B);
+  @override
+  final Color darkSecondaryForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color darkMuted = const Color(0xFF1E293B);
+  @override
+  final Color darkMutedForeground = const Color(0xFF94A3B8);
+  @override
+  final Color darkAccent = const Color(0xFF1E293B);
+  @override
+  final Color darkAccentForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color darkDestructive = const Color(0xFF7F1D1D);
+  @override
+  final Color darkDestructiveForeground = const Color(0xFFF8FAFC);
+  @override
+  final Color darkBorder = const Color(0xFF1E293B);
+  @override
+  final Color darkInput = const Color(0xFF1E293B);
+  @override
+  final Color darkRing = const Color(0xFF1E293B);
+}
+
+//==============================================================================
+// KELAS TEMA UTAMA
+//==============================================================================
+
 class AppTheme {
-  // Font families dari CSS
-  static const String fontFamily = 'Open Sans, sans-serif'; // --font-sans
-  static const String fontSerif = 'Georgia, serif'; // --font-serif
-  static const String fontMono = 'Menlo, monospace'; // --font-mono
+  static final AppColorPalette _colors = const AppColorsZinc();
 
-  // Border radius dari CSS (--radius: 1.3rem; 1.3 * 16 = 20.8)
-  static const double borderRadius = 20.8;
+  static final _fontFamily = GoogleFonts.openSans().fontFamily;
+  static const double _borderRadius = 8.0;
 
-  // Shadow values (menggunakan implementasi Flutter yang sudah ada)
-  // Shadow dari CSS (--shadow-sm, dll.) memiliki alpha 0.00 (transparan)
-  // jadi kita pertahankan shadow yang sudah ada di Flutter.
-  static List<BoxShadow> getShadowSm(bool isDark) {
-    return [
-      BoxShadow(
-        color: Colors.black.withOpacity(
-          isDark ? 0.10 : 0.05,
-        ), // Disesuaikan agar withOpacity dipakai
-        blurRadius: 3, // Sedikit penyesuaian dari CSS (contoh)
-        offset: const Offset(0, 1),
-      ),
-      BoxShadow(
-        color: Colors.black.withOpacity(
-          isDark ? 0.08 : 0.04,
-        ), // Disesuaikan agar withOpacity dipakai
-        blurRadius: 2, // Sedikit penyesuaian dari CSS (contoh)
-        offset: const Offset(0, 1),
-      ),
-    ];
-  }
-
-  static List<BoxShadow> getShadowMd(bool isDark) {
-    return [
-      BoxShadow(
-        color: Colors.black.withOpacity(isDark ? 0.10 : 0.06),
-        blurRadius: 6, // Sedikit penyesuaian dari CSS (contoh)
-        offset: const Offset(0, 2),
-        spreadRadius: -1,
-      ),
-      BoxShadow(
-        color: Colors.black.withOpacity(isDark ? 0.08 : 0.05),
-        blurRadius: 4, // Sedikit penyesuaian dari CSS (contoh)
-        offset: const Offset(0, 1),
-        spreadRadius: -1,
-      ),
-    ];
-  }
-
-  static List<BoxShadow> getShadowLg(bool isDark) {
-    return [
-      BoxShadow(
-        color: Colors.black.withOpacity(isDark ? 0.10 : 0.05),
-        blurRadius: 15, // Sedikit penyesuaian dari CSS (contoh)
-        offset: const Offset(0, 4),
-        spreadRadius: -1,
-      ),
-      BoxShadow(
-        color: Colors.black.withOpacity(isDark ? 0.08 : 0.04),
-        blurRadius: 6, // Sedikit penyesuaian dari CSS (contoh)
-        offset: const Offset(0, 2),
-        spreadRadius: -2,
-      ),
-    ];
-  }
-
-  // Light Theme
+  // Tema Terang (Light Mode)
   static final ThemeData light = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    fontFamily: fontFamily, // Menggunakan font dari CSS
-    // Colors
-    scaffoldBackgroundColor: AppColors.lightBackground,
-    primaryColor: AppColors.lightPrimary,
-    colorScheme: const ColorScheme.light(
-      primary: AppColors.lightPrimary,
-      onPrimary: AppColors.lightPrimaryForeground,
-      secondary: AppColors.lightSecondary,
-      onSecondary: AppColors.lightSecondaryForeground,
-      tertiary: AppColors.lightAccent, // Menggunakan Accent sebagai Tertiary
-      onTertiary: AppColors.lightAccentForeground,
-      error: AppColors.lightDestructive,
-      onError: AppColors.lightDestructiveForeground,
-      surface: AppColors.lightCard, // Menggunakan Card sebagai Surface
-      onSurface: AppColors.lightCardForeground,
-      background: AppColors.lightBackground, // Eksplisit
-      onBackground: AppColors.lightForeground, // Eksplisit
-      outline: AppColors.lightBorder,
-      // Anda bisa menambahkan mapping lain jika perlu
-      // primaryContainer: AppColors.lightPopover, (contoh jika popover ingin jadi primary container)
-      // onPrimaryContainer: AppColors.lightPopoverForeground,
+    fontFamily: _fontFamily,
+    scaffoldBackgroundColor: _colors.lightBackground,
+    primaryColor: _colors.lightPrimary,
+    colorScheme: ColorScheme.light(
+      primary: _colors.lightPrimary,
+      onPrimary: _colors.lightPrimaryForeground,
+      secondary: _colors.lightSecondary,
+      onSecondary: _colors.lightSecondaryForeground,
+      error: _colors.lightDestructive,
+      onError: _colors.lightDestructiveForeground,
+      surface: _colors.lightCard,
+      onSurface: _colors.lightCardForeground,
+      outline: _colors.lightBorder,
     ),
-
-    // Typography
-    textTheme:
-        TextTheme(
-          displayLarge: TextStyle(color: AppColors.lightForeground),
-          displayMedium: TextStyle(color: AppColors.lightForeground),
-          displaySmall: TextStyle(color: AppColors.lightForeground),
-          headlineLarge: TextStyle(color: AppColors.lightForeground),
-          headlineMedium: TextStyle(color: AppColors.lightForeground),
-          headlineSmall: TextStyle(color: AppColors.lightForeground),
-          titleLarge: TextStyle(color: AppColors.lightForeground),
-          titleMedium: TextStyle(color: AppColors.lightForeground),
-          titleSmall: TextStyle(color: AppColors.lightForeground),
-          bodyLarge: TextStyle(color: AppColors.lightForeground),
-          bodyMedium: TextStyle(color: AppColors.lightForeground),
-          bodySmall: TextStyle(
-            color: AppColors.lightMutedForeground,
-          ), // Sesuai dengan muted foreground
-          labelLarge: TextStyle(color: AppColors.lightForeground),
-          labelMedium: TextStyle(color: AppColors.lightForeground),
-          labelSmall: TextStyle(
-            color: AppColors.lightMutedForeground,
-          ), // Sesuai dengan muted foreground
-        ).apply(
-          bodyColor: AppColors.lightForeground,
-          displayColor: AppColors.lightForeground,
-        ),
-
+    textTheme: _textTheme(
+      _colors.lightForeground,
+      _colors.lightMutedForeground,
+    ),
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.lightBackground,
-      foregroundColor: AppColors.lightForeground,
+      backgroundColor: _colors.lightBackground,
+      foregroundColor: _colors.lightForeground,
       elevation: 0,
-      shadowColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      iconTheme: IconThemeData(color: _colors.lightForeground),
       titleTextStyle: TextStyle(
-        color: AppColors.lightForeground,
-        fontSize: 18, // Anda bisa sesuaikan
-        fontWeight: FontWeight.w600, // Anda bisa sesuaikan
-        fontFamily: fontFamily,
+        color: _colors.lightForeground,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        fontFamily: _fontFamily,
       ),
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.lightPrimary,
-        foregroundColor: AppColors.lightPrimaryForeground,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          // CSS: --radius-sm: calc(var(--radius) - 4px);
-          // Flutter: borderRadius - 4 (jika borderRadius utama adalah var(--radius))
-          // Kita menggunakan borderRadius (20.8) yang sudah disesuaikan, jadi -4 tetap relevan
-          borderRadius: BorderRadius.circular(
-            borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ), // Contoh padding
-      ),
+    elevatedButtonTheme: _elevatedButtonTheme(
+      _colors.lightPrimary,
+      _colors.lightPrimaryForeground,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: AppColors.lightInput,
-      hintStyle: TextStyle(color: AppColors.lightMutedForeground),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(
-          borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-        ),
-        borderSide: BorderSide(color: AppColors.lightBorder),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(
-          borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-        ),
-        borderSide: BorderSide(color: AppColors.lightBorder),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(
-          borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-        ),
-        borderSide: BorderSide(color: AppColors.lightRing, width: 2),
-      ),
-      // contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10), // Contoh padding
+    inputDecorationTheme: _inputDecorationTheme(
+      fillColor: _colors.lightInput,
+      borderColor: _colors.lightBorder,
+      focusedBorderColor: _colors.lightRing,
+      hintColor: _colors.lightMutedForeground,
     ),
-
-    // Divider
-    dividerTheme: DividerThemeData(color: AppColors.lightBorder, thickness: 1),
-
-    // Navigation Bar
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppColors.lightCard,
-      selectedItemColor: AppColors.lightPrimary,
-      unselectedItemColor:
-          AppColors.lightMutedForeground, // Sesuai muted foreground
+    dividerTheme: DividerThemeData(color: _colors.lightBorder, thickness: 1),
+    cardTheme: CardThemeData(
+      color: _colors.lightCard,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_borderRadius),
+        side: BorderSide(color: _colors.lightBorder),
+      ),
     ),
   );
 
-  // Dark Theme
+  // Tema Gelap (Dark Mode)
   static final ThemeData dark = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    fontFamily: fontFamily, // Menggunakan font dari CSS
-    // Colors
-    scaffoldBackgroundColor: AppColors.darkBackground,
-    primaryColor: AppColors.darkPrimary,
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.darkPrimary,
-      onPrimary: AppColors.darkPrimaryForeground,
-      secondary: AppColors.darkSecondary,
-      onSecondary: AppColors.darkSecondaryForeground,
-      tertiary: AppColors.darkAccent, // Menggunakan Accent sebagai Tertiary
-      onTertiary: AppColors.darkAccentForeground,
-      error: AppColors.darkDestructive,
-      onError: AppColors.darkDestructiveForeground,
-      surface: AppColors.darkCard, // Menggunakan Card sebagai Surface
-      onSurface: AppColors.darkCardForeground,
-      background: AppColors.darkBackground, // Eksplisit
-      onBackground: AppColors.darkForeground, // Eksplisit
-      outline: AppColors.darkBorder,
+    fontFamily: _fontFamily,
+    scaffoldBackgroundColor: _colors.darkBackground,
+    primaryColor: _colors.darkPrimary,
+    colorScheme: ColorScheme.dark(
+      primary: _colors.darkPrimary,
+      onPrimary: _colors.darkPrimaryForeground,
+      secondary: _colors.darkSecondary,
+      onSecondary: _colors.darkSecondaryForeground,
+      error: _colors.darkDestructive,
+      onError: _colors.darkDestructiveForeground,
+      surface: _colors.darkCard,
+      onSurface: _colors.darkCardForeground,
+      outline: _colors.darkBorder,
     ),
-
-    // Typography
-    textTheme:
-        TextTheme(
-          displayLarge: TextStyle(color: AppColors.darkForeground),
-          displayMedium: TextStyle(color: AppColors.darkForeground),
-          displaySmall: TextStyle(color: AppColors.darkForeground),
-          headlineLarge: TextStyle(color: AppColors.darkForeground),
-          headlineMedium: TextStyle(color: AppColors.darkForeground),
-          headlineSmall: TextStyle(color: AppColors.darkForeground),
-          titleLarge: TextStyle(color: AppColors.darkForeground),
-          titleMedium: TextStyle(color: AppColors.darkForeground),
-          titleSmall: TextStyle(color: AppColors.darkForeground),
-          bodyLarge: TextStyle(color: AppColors.darkForeground),
-          bodyMedium: TextStyle(color: AppColors.darkForeground),
-          bodySmall: TextStyle(
-            color: AppColors.darkMutedForeground,
-          ), // Sesuai dengan muted foreground
-          labelLarge: TextStyle(color: AppColors.darkForeground),
-          labelMedium: TextStyle(color: AppColors.darkForeground),
-          labelSmall: TextStyle(
-            color: AppColors.darkMutedForeground,
-          ), // Sesuai dengan muted foreground
-        ).apply(
-          bodyColor: AppColors.darkForeground,
-          displayColor: AppColors.darkForeground,
-        ),
-
-    // AppBar
+    textTheme: _textTheme(_colors.darkForeground, _colors.darkMutedForeground),
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.darkBackground,
-      foregroundColor: AppColors.darkForeground,
+      backgroundColor: _colors.darkBackground,
+      foregroundColor: _colors.darkForeground,
       elevation: 0,
-      shadowColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      iconTheme: IconThemeData(color: _colors.darkForeground),
       titleTextStyle: TextStyle(
-        color: AppColors.darkForeground,
+        color: _colors.darkForeground,
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        fontFamily: fontFamily,
+        fontFamily: _fontFamily,
       ),
     ),
+    elevatedButtonTheme: _elevatedButtonTheme(
+      _colors.darkPrimary,
+      _colors.darkPrimaryForeground,
+    ),
+    inputDecorationTheme: _inputDecorationTheme(
+      fillColor: _colors.darkInput,
+      borderColor: _colors.darkBorder,
+      focusedBorderColor: _colors.darkRing,
+      hintColor: _colors.darkMutedForeground,
+    ),
+    dividerTheme: DividerThemeData(color: _colors.darkBorder, thickness: 1),
+    // **PERBAIKAN**: Menggunakan `CardThemeData` bukan `CardTheme`
+    cardTheme: CardThemeData(
+      color: _colors.darkCard,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_borderRadius),
+        side: BorderSide(color: _colors.darkBorder),
+      ),
+    ),
+  );
 
-    // Buttons
-    elevatedButtonTheme: ElevatedButtonThemeData(
+  // Helper methods (tidak berubah, tapi disertakan untuk kelengkapan)
+  static TextTheme _textTheme(Color foreground, Color mutedForeground) {
+    return TextTheme(
+      displayLarge: TextStyle(color: foreground),
+      displayMedium: TextStyle(color: foreground),
+      displaySmall: TextStyle(color: foreground),
+      headlineLarge: TextStyle(color: foreground),
+      headlineMedium: TextStyle(color: foreground, fontWeight: FontWeight.w600),
+      headlineSmall: TextStyle(color: foreground, fontWeight: FontWeight.w600),
+      titleLarge: TextStyle(color: foreground, fontWeight: FontWeight.w600),
+      titleMedium: TextStyle(color: foreground),
+      titleSmall: TextStyle(color: foreground),
+      bodyLarge: TextStyle(color: foreground),
+      bodyMedium: TextStyle(color: foreground),
+      bodySmall: TextStyle(color: mutedForeground),
+      labelLarge: TextStyle(color: foreground, fontWeight: FontWeight.w600),
+      labelMedium: TextStyle(color: mutedForeground),
+      labelSmall: TextStyle(color: mutedForeground),
+    ).apply(bodyColor: foreground, displayColor: foreground);
+  }
+
+  static ElevatedButtonThemeData _elevatedButtonTheme(
+    Color primary,
+    Color onPrimary,
+  ) {
+    return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.darkPrimary,
-        foregroundColor: AppColors.darkPrimaryForeground,
+        backgroundColor: primary,
+        foregroundColor: onPrimary,
         elevation: 0,
+        shadowColor: Colors.transparent,
+        textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-          ),
+          borderRadius: BorderRadius.circular(_borderRadius),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
-    ),
+    );
+  }
 
-    // Input Decoration
-    inputDecorationTheme: InputDecorationTheme(
+  static InputDecorationTheme _inputDecorationTheme({
+    required Color fillColor,
+    required Color borderColor,
+    required Color focusedBorderColor,
+    required Color hintColor,
+  }) {
+    return InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.darkInput,
-      hintStyle: TextStyle(color: AppColors.darkMutedForeground),
+      fillColor: fillColor,
+      hintStyle: TextStyle(color: hintColor),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(
-          borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-        ),
-        borderSide: BorderSide(color: AppColors.darkBorder),
+        borderRadius: BorderRadius.circular(_borderRadius),
+        borderSide: BorderSide(color: borderColor, width: 1.5),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(
-          borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-        ),
-        borderSide: BorderSide(color: AppColors.darkBorder),
+        borderRadius: BorderRadius.circular(_borderRadius),
+        borderSide: BorderSide(color: borderColor, width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(
-          borderRadius - 4 > 0 ? borderRadius - 4 : 4,
-        ),
-        borderSide: BorderSide(color: AppColors.darkRing, width: 2),
+        borderRadius: BorderRadius.circular(_borderRadius),
+        borderSide: BorderSide(color: focusedBorderColor, width: 2),
       ),
-      // contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-    ),
-
-    // Divider
-    dividerTheme: DividerThemeData(color: AppColors.darkBorder, thickness: 1),
-
-    // Navigation Bar
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppColors.darkCard,
-      selectedItemColor: AppColors.darkPrimary,
-      unselectedItemColor: AppColors.darkMutedForeground,
-    ),
-  );
+    );
+  }
 }
