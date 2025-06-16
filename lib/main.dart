@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           splitScreenMode: true,
           builder: (_, child) {
             return MaterialApp(
-              title: 'News App',
+              title: 'Flashfeed',
               debugShowCheckedModeBanner: false,
               theme: AppTheme.light,
               darkTheme: AppTheme.dark,
