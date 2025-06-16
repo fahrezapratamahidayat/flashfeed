@@ -22,7 +22,6 @@ class ThemeProvider with ChangeNotifier {
     await prefs.setString('theme_mode', themeName);
   }
 
-  // Mengubah tema
   void setThemeMode(String themeName) {
     ThemeMode mode;
 
