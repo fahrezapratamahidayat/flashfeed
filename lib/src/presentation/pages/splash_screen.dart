@@ -1,6 +1,5 @@
 import 'package:flashfeed/src/config/app_routes.dart';
-import 'package:flashfeed/src/presentation/widgets/app_logo.dart'; // Asumsikan ini adalah widget logo Anda
-import 'package:flashfeed/src/presentation/widgets/spacing.dart';
+import 'package:flashfeed/src/presentation/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +7,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -17,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
   late Animation<double> _textFadeAnimation;
+  late Animation<double> _taglineFadeAnimation;
 
   @override
   void initState() {
@@ -24,30 +24,22 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2500),
     );
 
     // Animasi Fade-in untuk logo
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(
-          0.0,
-          0.5,
-          curve: Curves.easeIn,
-        ), // Muncul di 0-50% durasi
+        curve: const Interval(0.0, 0.4, curve: Curves.easeIn),
       ),
     );
 
     // Animasi Scale-up untuk logo
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.6, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(
-          0.0,
-          0.5,
-          curve: Curves.elasticOut,
-        ), // Efek elastis saat membesar
+        curve: const Interval(0.0, 0.5, curve: Curves.elasticOut),
       ),
     );
 
@@ -55,11 +47,15 @@ class _SplashScreenState extends State<SplashScreen>
     _textFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(
-          0.5,
-          1.0,
-          curve: Curves.easeIn,
-        ), // Muncul setelah logo (50-100% durasi)
+        curve: const Interval(0.4, 0.7, curve: Curves.easeIn),
+      ),
+    );
+
+    // Animasi Fade-in untuk tagline
+    _taglineFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.6, 0.9, curve: Curves.easeIn),
       ),
     );
 
@@ -70,12 +66,8 @@ class _SplashScreenState extends State<SplashScreen>
     // Mulai animasi
     _animationController.forward();
 
-    // Tunggu animasi selesai ATAU minimal 3 detik (mana yang lebih lama)
-    // Durasi animasi logo adalah 1000ms, teks muncul setelahnya. Total animasi sekitar 2000ms.
-    // Future.delayed asli adalah 3 detik. Kita bisa sesuaikan.
-    await Future.delayed(
-      const Duration(seconds: 3),
-    ); // Total durasi splash screen
+    // Tunggu animasi selesai dengan minimal 3 detik
+    await Future.delayed(const Duration(seconds: 3));
 
     // Hentikan controller jika belum selesai untuk menghindari error
     if (mounted) {
@@ -85,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
     final prefs = await SharedPreferences.getInstance();
     final seenIntro = prefs.getBool('seen_intro') ?? false;
 
-    if (!mounted) return; // Pastikan widget masih ada di tree
+    if (!mounted) return;
 
     if (!seenIntro) {
       Navigator.pushReplacementNamed(context, AppRoutes.introduction);
@@ -102,39 +94,103 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: ScaleTransition(
-                scale: _scaleAnimation,
-                child: const AppIcon(width: 100, height: 100),
-              ),
-            ),
-            Spacing.horizontal(Spacing.lg),
-            FadeTransition(
-              opacity: _textFadeAnimation,
-              child: const Text(
-                'FlashFeed',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: 1.5,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 10.0,
-                      color: Colors.black26,
-                      offset: Offset(2.0, 2.0),
+      backgroundColor: colorScheme.primary,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [colorScheme.primary, colorScheme.primary.withOpacity(0.8)],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo dengan animasi fade dan scale
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            spreadRadius: 5,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: const AppIcon(width: 80, height: 80),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+
+                const SizedBox(height: 24),
+
+                // Teks "FlashFeed" dengan animasi fade
+                FadeTransition(
+                  opacity: _textFadeAnimation,
+                  child: Text(
+                    'FlashFeed',
+                    style: theme.textTheme.displaySmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.2,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: Colors.black26,
+                          offset: const Offset(2.0, 2.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // Tagline dengan animasi fade
+                FadeTransition(
+                  opacity: _taglineFadeAnimation,
+                  child: Text(
+                    'Berita Terkini dalam Genggaman',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 60),
+
+                // Indikator loading
+                FadeTransition(
+                  opacity: _taglineFadeAnimation,
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 3,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
