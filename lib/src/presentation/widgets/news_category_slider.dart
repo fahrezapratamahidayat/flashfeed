@@ -73,11 +73,6 @@ class _NewsCategorySliderState extends State<NewsCategorySlider> {
                     foregroundColor: isSelected
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).textTheme.bodyLarge?.color,
-                    backgroundColor: isSelected
-                        ? Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.1)
-                        : Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
