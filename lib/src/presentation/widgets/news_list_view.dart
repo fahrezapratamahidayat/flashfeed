@@ -69,75 +69,80 @@ class _NewsListViewState extends State<NewsListView> {
   Widget _buildContent() {
     switch (_currentState) {
       case NewsListStateValue.loading:
-        return const Center(child: CircularProgressIndicator());
+        return const SliverFillRemaining(
+          child: Center(child: CircularProgressIndicator()),
+        );
       case NewsListStateValue.error:
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error_outline_rounded,
-                  color: Colors.redAccent,
-                  size: 50,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Oops! Terjadi Kesalahan',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _errorMessage,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.refresh_rounded),
-                  onPressed: () => _fetchNewsData(widget.apiUrl),
-                  label: const Text('Coba Lagi'),
-                ),
-              ],
+        return SliverFillRemaining(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline_rounded,
+                    color: Colors.redAccent,
+                    size: 50,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Oops! Terjadi Kesalahan',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _errorMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.refresh_rounded),
+                    onPressed: () => _fetchNewsData(widget.apiUrl),
+                    label: const Text('Coba Lagi'),
+                  ),
+                ],
+              ),
             ),
           ),
         );
       case NewsListStateValue.empty:
-        return const Center(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.list_alt_rounded, size: 50, color: Colors.grey),
-                SizedBox(height: 16),
-                Text('Tidak ada berita untuk kategori ini saat ini.'),
-              ],
+        return SliverFillRemaining(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.list_alt_rounded, size: 50, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  Text('Tidak ada berita untuk kategori ini saat ini.'),
+                ],
+              ),
             ),
           ),
         );
       case NewsListStateValue.loaded:
-        return RefreshIndicator(
-          onRefresh: () => _fetchNewsData(widget.apiUrl),
-          child: ListView.builder(
-            itemCount: _articles.length,
-            itemBuilder: (context, index) {
-              return NewsListItem(article: _articles[index]);
-            },
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => NewsListItem(article: _articles[index]),
+            childCount: _articles.length,
           ),
         );
       case NewsListStateValue.initial:
-        return const Center(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.category_rounded, size: 50, color: Colors.grey),
-                SizedBox(height: 16),
-                Text('Silakan pilih kategori berita di atas.'),
-              ],
+        return SliverFillRemaining(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.category_rounded, size: 50, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  Text('Silakan pilih kategori berita di atas.'),
+                ],
+              ),
             ),
           ),
         );
@@ -147,16 +152,18 @@ class _NewsListViewState extends State<NewsListView> {
   @override
   Widget build(BuildContext context) {
     if (widget.apiUrl.isEmpty && _currentState == NewsListStateValue.initial) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.touch_app_rounded, size: 50, color: Colors.grey),
-              SizedBox(height: 16),
-              Text('Pilih kategori untuk menampilkan berita.'),
-            ],
+      return SliverFillRemaining(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.touch_app_rounded, size: 50, color: Colors.grey),
+                const SizedBox(height: 16),
+                Text('Pilih kategori untuk menampilkan berita.'),
+              ],
+            ),
           ),
         ),
       );
