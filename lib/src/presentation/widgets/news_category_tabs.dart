@@ -23,73 +23,102 @@ class _NewsCategoryTabsState extends State<NewsCategoryTabs> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Container(
-      height: 40,
+      height: 44,
       decoration: BoxDecoration(
-        color: colorScheme.primary,
-        borderRadius: BorderRadius.circular(8),
+        color: isDarkMode
+            ? colorScheme.surface.withValues(alpha: 0.5)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colorScheme.outline.withValues(alpha: 0.12),
+          width: 1,
+        ),
       ),
       padding: const EdgeInsets.all(4),
       child: Row(
-        children: searchcategory.map((category) {
+        children: searchcategory.asMap().entries.map((entry) {
+          final index = entry.key;
+          final category = entry.value;
           final bool isSelected = category['value'] == _selectedCategoryValue;
+          final bool isFirst = index == 0;
+          final bool isLast = index == searchcategory.length - 1;
+
           return Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
+              padding: EdgeInsets.only(
+                left: isFirst ? 0 : 2,
+                right: isLast ? 0 : 2,
+              ),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOutCubic,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? colorScheme.onSecondaryContainer
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(6),
+                  color: isSelected ? colorScheme.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 3,
+                            color: colorScheme.primary.withValues(alpha: 0.25),
+                            blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
-                        ]
-                      : null,
-                  border: isSelected
-                      ? Border.all(
-                          color: colorScheme.onSecondaryContainer.withValues(
-                            alpha: 0.1,
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: isDarkMode ? 0.1 : 0.05,
+                            ),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
                           ),
-                          width: 1,
-                        )
+                        ]
                       : null,
                 ),
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      setState(() {
-                        _selectedCategoryValue = category['value'];
-                      });
+                      if (!isSelected) {
+                        setState(() {
+                          _selectedCategoryValue = category['value'];
+                        });
+                      }
                     },
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(8),
+                    splashColor: isSelected
+                        ? colorScheme.onPrimary.withValues(alpha: 0.1)
+                        : colorScheme.primary.withValues(alpha: 0.1),
+                    highlightColor: isSelected
+                        ? colorScheme.onPrimary.withValues(alpha: 0.05)
+                        : colorScheme.primary.withValues(alpha: 0.05),
                     child: Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
+                        horizontal: 12,
+                        vertical: 8,
                       ),
-                      child: Text(
-                        category['label']!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: isSelected
-                              ? colorScheme.surface
-                              : colorScheme.onPrimary,
-                          fontWeight: isSelected
-                              ? FontWeight.w600
-                              : FontWeight.w500,
-                          fontSize: 13,
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 200),
+                        style:
+                            theme.textTheme.labelMedium?.copyWith(
+                              color: isSelected
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSurface.withValues(
+                                      alpha: 0.7,
+                                    ),
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w500,
+                              fontSize: 13,
+                              letterSpacing: 0.1,
+                            ) ??
+                            const TextStyle(),
+                        child: Text(
+                          category['label']!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
@@ -98,7 +127,7 @@ class _NewsCategoryTabsState extends State<NewsCategoryTabs> {
               ),
             ),
           );
-        }).toList(), // <-- Jangan lupa .toList()
+        }).toList(),
       ),
     );
   }
