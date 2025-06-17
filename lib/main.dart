@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               title: 'Flashfeed',
               debugShowCheckedModeBanner: false,
-              theme: AppTheme.light,
-              darkTheme: AppTheme.dark,
+              theme: ModernTheme.lightTheme,
+              darkTheme: ModernTheme.darkTheme,
               themeMode: themeProvider.themeMode,
               initialRoute: AppRoutes.splash,
               onGenerateRoute: AppRoutes.generateRoute,
