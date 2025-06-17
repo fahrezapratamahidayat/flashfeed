@@ -14,26 +14,45 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Container(
-      decoration: const BoxDecoration(),
+      decoration: BoxDecoration(
+        color: isDarkMode ? colorScheme.surface : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+        border: Border(
+          top: BorderSide(
+            color: isDarkMode
+                ? colorScheme.surfaceVariant.withOpacity(0.1)
+                : colorScheme.outline.withOpacity(0.08),
+            width: 1,
+          ),
+        ),
+      ),
       child: SafeArea(
+        top: false,
         child: Container(
-          height: 80,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          height: 70,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           child: BottomNavigationBar(
             items: [
               _buildNavItem(
                 context,
                 icon: Icons.home_outlined,
                 activeIcon: Icons.home_rounded,
-                label: 'Home',
+                label: 'Beranda',
               ),
               _buildNavItem(
                 context,
                 icon: Icons.explore_outlined,
                 activeIcon: Icons.explore_rounded,
-                label: 'Explore',
+                label: 'Jelajahi',
               ),
               _buildNavItem(
                 context,
@@ -45,34 +64,33 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 context,
                 icon: Icons.bookmark_border_rounded,
                 activeIcon: Icons.bookmark_rounded,
-                label: 'Saved',
+                label: 'Tersimpan',
               ),
               BottomNavigationBarItem(
                 icon: _buildProfileIcon(context, isActive: false),
                 activeIcon: _buildProfileIcon(context, isActive: true),
-                label: 'Profile',
+                label: 'Profil',
               ),
             ],
             currentIndex: selectedIndex,
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.transparent,
             elevation: 0,
-            selectedItemColor:
-                theme.bottomNavigationBarTheme.selectedItemColor ??
-                theme.primaryColor,
-            unselectedItemColor:
-                theme.bottomNavigationBarTheme.unselectedItemColor ??
-                colorScheme.onSurface.withValues(alpha: 0.6),
-            selectedFontSize: 11,
-            unselectedFontSize: 11,
+            selectedItemColor: colorScheme.primary,
+            unselectedItemColor: colorScheme.onSurfaceVariant.withOpacity(0.7),
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
             selectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.w600,
               height: 1.5,
+              letterSpacing: 0.2,
             ),
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.w500,
               height: 1.5,
             ),
+            showUnselectedLabels: true,
+            enableFeedback: true,
             onTap: onItemTapped,
           ),
         ),
@@ -87,21 +105,27 @@ class CustomBottomNavigationBar extends StatelessWidget {
     required String label,
   }) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return BottomNavigationBarItem(
       icon: Container(
-        padding: const EdgeInsets.all(4),
-        child: Icon(icon, size: 22),
+        padding: const EdgeInsets.all(6),
+        child: Icon(
+          icon,
+          size: 24,
+          color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+        ),
       ),
       activeIcon: Container(
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: theme.primaryColor.withValues(alpha: 0.1),
+          color: colorScheme.primary.withOpacity(0.12),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(activeIcon, size: 22),
+        child: Icon(activeIcon, size: 24, color: colorScheme.primary),
       ),
       label: label,
+      tooltip: label,
     );
   }
 
@@ -111,27 +135,28 @@ class CustomBottomNavigationBar extends StatelessWidget {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Container(
-      width: 32,
-      height: 32,
+      width: 36,
+      height: 36,
       decoration: BoxDecoration(
         color: isActive
-            ? theme.primaryColor.withValues(alpha: 0.1)
-            : theme.cardColor.withValues(alpha: isDarkMode ? 0.1 : 0.05),
-        borderRadius: BorderRadius.circular(16),
+            ? colorScheme.primary.withOpacity(0.12)
+            : isDarkMode
+            ? colorScheme.surfaceVariant.withOpacity(0.3)
+            : colorScheme.surfaceVariant.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(18),
         border: isActive
             ? Border.all(
-                color: theme.primaryColor.withValues(alpha: 0.3),
+                color: colorScheme.primary.withOpacity(0.3),
                 width: 1.5,
               )
             : null,
       ),
       child: Icon(
         isActive ? Icons.person_rounded : Icons.person_outline_rounded,
-        size: 18,
+        size: 20,
         color: isActive
-            ? theme.primaryColor
-            : theme.iconTheme.color?.withValues(alpha: 0.6) ??
-                  colorScheme.onSurface.withValues(alpha: 0.6),
+            ? colorScheme.primary
+            : colorScheme.onSurfaceVariant.withOpacity(0.7),
       ),
     );
   }
