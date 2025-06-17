@@ -1,12 +1,12 @@
 import 'package:flashfeed/src/presentation/pages/articel_detail_screen.dart';
 import 'package:flashfeed/src/presentation/pages/explore_screen.dart';
-import 'package:flashfeed/src/presentation/pages/forgot_password_screen.dart';
+import 'package:flashfeed/src/presentation/pages/auth/forgot_password_screen.dart';
 import 'package:flashfeed/src/presentation/pages/home_screen.dart';
 import 'package:flashfeed/src/presentation/pages/introduction_screen.dart';
-import 'package:flashfeed/src/presentation/pages/login_screen.dart';
+import 'package:flashfeed/src/presentation/pages/auth/login_screen.dart';
 import 'package:flashfeed/src/presentation/pages/not_found_screen.dart';
 import 'package:flashfeed/src/presentation/pages/profile_screen.dart';
-import 'package:flashfeed/src/presentation/pages/register_screen.dart';
+import 'package:flashfeed/src/presentation/pages/auth/register_screen.dart';
 import 'package:flashfeed/src/presentation/pages/saved_screen.dart';
 import 'package:flashfeed/src/presentation/pages/splash_screen.dart';
 import 'package:flashfeed/src/presentation/pages/trending_screen.dart';
