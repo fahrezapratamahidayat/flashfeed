@@ -1,8 +1,10 @@
 import 'package:flashfeed/src/config/app_routes.dart';
-import 'package:flashfeed/src/presentation/widgets/text_field.dart';
-import 'package:flashfeed/src/presentation/widgets/button.dart';
-import 'package:flashfeed/src/presentation/widgets/app_logo.dart';
+import 'package:flashfeed/src/widgets/text_field.dart';
+import 'package:flashfeed/src/widgets/button.dart';
+import 'package:flashfeed/src/widgets/app_logo.dart';
+import 'package:flashfeed/src/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,6 +17,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _avatarController = TextEditingController(
+    text: "https://randomuser.me/api/portraits/men/42.jpg", // Default avatar
+  );
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -24,42 +30,77 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _agreeToTerms = false;
 
   void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
+    if (!mounted) return;
+    setState(() => _isPasswordVisible = !_isPasswordVisible);
   }
 
   void _toggleConfirmPasswordVisibility() {
-    setState(() {
-      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-    });
+    if (!mounted) return;
+    setState(() => _isConfirmPasswordVisible = !_isConfirmPasswordVisible);
   }
 
-  void _handleRegister() {
-    if (_formKey.currentState?.validate() ?? false) {
-      if (!_agreeToTerms) {
+  Future<void> _handleRegister() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    if (!_agreeToTerms) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Anda harus menyetujui syarat dan ketentuan'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (!mounted) return;
+    setState(() => _isLoading = true);
+
+    try {
+      final registerData = {
+        'email': _emailController.text.trim(),
+        'password': _passwordController.text.trim(),
+        'name': _nameController.text.trim(),
+        'title': _titleController.text.trim(),
+        'avatar': _avatarController.text.trim().isEmpty
+            ? "https://randomuser.me/api/portraits/men/42.jpg"
+            : _avatarController.text.trim(),
+      };
+
+      final success = await Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).register(registerData);
+
+      if (!mounted) return;
+
+      setState(() => _isLoading = false);
+
+      if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Anda harus menyetujui syarat dan ketentuan'),
-            behavior: SnackBarBehavior.floating,
+            content: Text('Registrasi berhasil! Silakan login.'),
+            backgroundColor: Colors.green,
           ),
         );
-        return;
-      }
-
-      setState(() {
-        _isLoading = true;
-      });
-
-      // Simulasi proses registrasi
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() {
-          _isLoading = false;
-        });
-
-        // Navigasi ke halaman login setelah berhasil registrasi
         Navigator.pushReplacementNamed(context, AppRoutes.login);
-      });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registrasi gagal. Silakan coba lagi.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -69,9 +110,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colorScheme.onSecondaryFixedVariant,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: colorScheme.onSecondaryFixedVariant,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded, color: colorScheme.onSurface),
@@ -89,12 +130,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo
-                  Center(child: AppIcon(height: 64, width: 64)),
-
+                  Center(child: AppIcon(height: 72, width: 72)),
                   const SizedBox(height: 24),
-
-                  // Judul dan Subtitle
                   Text(
                     'Buat Akun Baru',
                     style: theme.textTheme.headlineSmall?.copyWith(
@@ -103,9 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-
                   const SizedBox(height: 8),
-
                   Text(
                     'Daftar dalam waktu kurang dari 1 menit',
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -113,10 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-
                   const SizedBox(height: 32),
-
-                  // Nama Lengkap
                   AppTextField(
                     label: "Nama Lengkap",
                     placeholder: "Masukkan nama lengkap Anda",
@@ -135,17 +167,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Nama tidak boleh kosong';
                       }
-                      if (value.length < 3) {
-                        return 'Nama minimal 3 karakter';
-                      }
                       return null;
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Email
                   AppTextField(
                     label: "Email",
                     placeholder: "Masukkan alamat email Anda",
@@ -173,10 +199,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Password
+                  AppTextField(
+                    label: "Pekerjaan",
+                    placeholder: "Masukkan pekerjaan Anda",
+                    controller: _titleController,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    prefixIcon: Icon(
+                      Icons.work_outline_rounded,
+                      color: colorScheme.onSurfaceVariant,
+                      size: 20,
+                    ),
+                    variant: TextFieldVariant.outlined,
+                    size: TextFieldSize.medium,
+                    required: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Pekerjaan tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                  const SizedBox(height: 16),
+                  AppTextField(
+                    label: "URL Avatar",
+                    placeholder: "Masukkan URL avatar Anda",
+                    controller: _avatarController,
+                    keyboardType: TextInputType.url,
+                    textInputAction: TextInputAction.next,
+                    prefixIcon: Icon(
+                      Icons.image_outlined,
+                      color: colorScheme.onSurfaceVariant,
+                      size: 20,
+                    ),
+                    variant: TextFieldVariant.outlined,
+                    size: TextFieldSize.medium,
+                    helperText: "Jika kosong, avatar default akan digunakan",
+                    validator: (value) {
+                      // Avatar bisa kosong, akan menggunakan default
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                  const SizedBox(height: 16),
                   AppTextField(
                     label: "Kata Sandi",
                     placeholder: "Masukkan kata sandi Anda",
@@ -208,23 +275,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Kata sandi tidak boleh kosong';
                       }
-                      if (value.length < 8) {
-                        return 'Kata sandi minimal 8 karakter';
-                      }
-                      if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                        return 'Kata sandi harus memiliki minimal 1 huruf kapital';
-                      }
-                      if (!RegExp(r'[0-9]').hasMatch(value)) {
-                        return 'Kata sandi harus memiliki minimal 1 angka';
+                      if (value.length < 6) {
+                        return 'Kata sandi minimal 16 karakter';
                       }
                       return null;
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Konfirmasi Password
                   AppTextField(
                     label: "Konfirmasi Kata Sandi",
                     placeholder: "Masukkan ulang kata sandi Anda",
@@ -263,10 +321,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
-
                   const SizedBox(height: 20),
-
-                  // Syarat dan Ketentuan
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -326,10 +381,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 32),
-
-                  // Tombol Daftar
                   AppButton(
                     text: 'Daftar',
                     variant: ButtonVariant.primary,
@@ -338,10 +390,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: _handleRegister,
                     isFullWidth: true,
                   ),
-
                   const SizedBox(height: 24),
-
-                  // Link ke Login
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -373,7 +422,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 16),
                 ],
               ),
@@ -388,6 +436,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _titleController.dispose();
+    _avatarController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();

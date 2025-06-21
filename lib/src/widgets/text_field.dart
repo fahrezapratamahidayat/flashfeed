@@ -81,23 +81,6 @@ class AppTextField extends StatefulWidget {
 
 class _AppTextFieldState extends State<AppTextField> {
   bool _showPassword = false;
-  bool _hasError = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _hasError = widget.errorText != null;
-  }
-
-  @override
-  void didUpdateWidget(AppTextField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.errorText != widget.errorText) {
-      setState(() {
-        _hasError = widget.errorText != null;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +102,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   widget.label!,
                   style: TextStyle(
                     fontSize: _getLabelFontSize(),
-                    color: _hasError
+                    color: widget.errorText != null
                         ? colors.error
                         : theme.textTheme.labelLarge?.color,
                     fontWeight: FontWeight.w500,
@@ -162,31 +145,12 @@ class _AppTextFieldState extends State<AppTextField> {
       maxLines: widget.maxLines,
       minLines: widget.minLines,
       maxLength: widget.maxLength,
-      onChanged: (value) {
-        if (widget.onChanged != null) {
-          widget.onChanged!(value);
-        }
-
-        if (widget.validator != null &&
-            widget.autovalidateMode == AutovalidateMode.onUserInteraction) {
-          setState(() {
-            _hasError = widget.validator!(value) != null;
-          });
-        }
-      },
+      onChanged: widget.onChanged,
       onFieldSubmitted: widget.onSubmitted,
       onTap: widget.onTap,
       autofocus: widget.autofocus,
       inputFormatters: widget.inputFormatters,
-      validator: widget.validator != null
-          ? (value) {
-              final error = widget.validator!(value);
-              setState(() {
-                _hasError = error != null;
-              });
-              return error;
-            }
-          : null,
+      validator: widget.validator,
       autovalidateMode: widget.autovalidateMode,
       style: TextStyle(
         fontSize: _getFontSize(),
@@ -247,7 +211,9 @@ class _AppTextFieldState extends State<AppTextField> {
         focusedErrorBorder: _getErrorBorder(theme, true),
         labelStyle: TextStyle(
           fontSize: _getLabelFontSize(),
-          color: _hasError ? colors.error : theme.textTheme.bodySmall?.color,
+          color: widget.errorText != null
+              ? colors.error
+              : theme.textTheme.bodySmall?.color,
         ),
         floatingLabelBehavior: widget.variant == TextFieldVariant.filled
             ? FloatingLabelBehavior.never
@@ -264,12 +230,6 @@ class _AppTextFieldState extends State<AppTextField> {
           fontSize: _getHelperFontSize(),
           color: colors.error,
         ),
-        // prefixIconPadding: widget.prefixIcon != null
-        //     ? EdgeInsets.zero
-        //     : const EdgeInsets.only(left: 12, right: 8),
-        // suffixIconPadding: widget.suffixIcon != null || widget.obscureText
-        //     ? EdgeInsets.zero
-        //     : const EdgeInsets.only(right: 12),
       ),
     );
   }
@@ -376,7 +336,7 @@ class _AppTextFieldState extends State<AppTextField> {
   InputBorder _getBorder(ThemeData theme, bool isFocused) {
     final isDark = theme.brightness == Brightness.dark;
     final colors = theme.colorScheme;
-    final borderRadius = BorderRadius.circular(20.8);
+    final borderRadius = BorderRadius.circular(8);
 
     final Color normalBorderColor = isDark
         ? theme.colorScheme.outline

@@ -1,26 +1,29 @@
-import 'package:flashfeed/src/presentation/pages/explore_screen.dart';
-import 'package:flashfeed/src/presentation/pages/home_tab_content.dart';
-import 'package:flashfeed/src/presentation/pages/profile_screen.dart';
-import 'package:flashfeed/src/presentation/pages/saved_screen.dart';
-import 'package:flashfeed/src/presentation/pages/trending_screen.dart';
-import 'package:flashfeed/src/presentation/widgets/app_logo.dart';
-import 'package:flashfeed/src/presentation/widgets/custom_bottom_navigation.dart';
-import 'package:flashfeed/src/presentation/widgets/theme_switcher.dart';
+import 'package:flashfeed/src/config/app_routes.dart';
+import 'package:flashfeed/src/pages/explore_screen.dart';
+import 'package:flashfeed/src/pages/home_screen.dart';
+import 'package:flashfeed/src/pages/profile_screen.dart';
+import 'package:flashfeed/src/pages/saved_screen.dart';
+import 'package:flashfeed/src/pages/trending_screen.dart';
+import 'package:flashfeed/src/providers/auth_provider.dart';
+import 'package:flashfeed/src/widgets/app_logo.dart';
+import 'package:flashfeed/src/widgets/custom_bottom_navigation.dart';
+import 'package:flashfeed/src/widgets/theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeTabContent(),
+    const HomeScreen(),
     const ExploreScreen(),
     const TrendingScreen(),
     const SavedScreen(),
@@ -39,6 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDarkMode = theme.brightness == Brightness.dark;
+
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.currentUser;
 
     return Scaffold(
       appBar: _selectedIndex == 0
@@ -61,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const AppIcon(width: 36, height: 36),
                         const SizedBox(width: 12),
                         Text(
-                          'Flashfeed',
+                          'FlashFeed',
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w700,
                             letterSpacing: -0.5,
@@ -74,23 +80,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         const ThemeSwitcher(),
                         const SizedBox(width: 8),
                         Container(
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
-                            color: isDarkMode
-                                ? colorScheme.surfaceContainerHighest
-                                      .withValues(alpha: 0.3)
-                                : colorScheme.surfaceContainerHighest
-                                      .withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(12),
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
                           ),
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.notifications_none_rounded,
-                              size: 24,
-                              color: colorScheme.onSurfaceVariant,
+                          child: Material(
+                            type: MaterialType.transparency,
+                            child: InkWell(
+                              customBorder: const CircleBorder(),
+                              onTap: () {
+                                Navigator.pushNamed(context, AppRoutes.profile);
+                              },
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundImage:
+                                    user?.avatar != null &&
+                                        user!.avatar.isNotEmpty
+                                    ? NetworkImage(user.avatar)
+                                    : const NetworkImage(
+                                        'https://randomuser.me/api/portraits/men/42.jpg',
+                                      ),
+                              ),
                             ),
-                            tooltip: 'Notifikasi',
-                            padding: const EdgeInsets.all(8),
                           ),
                         ),
                       ],

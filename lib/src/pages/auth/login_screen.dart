@@ -1,9 +1,10 @@
 import 'package:flashfeed/src/config/app_routes.dart';
-import 'package:flashfeed/src/presentation/widgets/button.dart';
-import 'package:flashfeed/src/presentation/widgets/app_logo.dart';
-import 'package:flashfeed/src/presentation/widgets/text_field.dart';
+import 'package:flashfeed/src/widgets/button.dart';
+import 'package:flashfeed/src/widgets/app_logo.dart';
+import 'package:flashfeed/src/widgets/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:flashfeed/src/providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,10 +15,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(
-    text: "fahrezapratamah@gmail.com",
-  );
-  final _passwordController = TextEditingController(text: "12345678");
+  final _emailController = TextEditingController(text: "fahreza.dev@gmail.com");
+  final _passwordController = TextEditingController(text: "password123");
   bool _isPasswordVisible = false;
   bool _isLoading = false;
   bool _rememberMe = true;
@@ -34,12 +33,23 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = true;
       });
 
-      // Simulasi proses login
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
+      Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).login(_emailController.text, _passwordController.text).then((success) {
+        if (success) {
+          Navigator.pushReplacementNamed(context, AppRoutes.home);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login gagal. Periksa email dan kata sandi Anda.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     }
   }
@@ -50,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -58,15 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(
               children: [
-                // Header
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-
-                // Logo
                 Center(child: AppIcon(height: 72, width: 72)),
-
                 const SizedBox(height: 24),
-
-                // Judul dan Subtitle
                 Text(
                   'Selamat Datang Kembali',
                   style: theme.textTheme.headlineSmall?.copyWith(
@@ -75,9 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-
                 const SizedBox(height: 8),
-
                 Text(
                   'Masuk ke akun Anda untuk melanjutkan',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -85,10 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-
                 const SizedBox(height: 40),
-
-                // Form Login
                 Form(
                   key: _formKey,
                   child: Column(
@@ -121,10 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
-
                       const SizedBox(height: 20),
-
-                      // Password Field
                       AppTextField(
                         label: "Kata Sandi",
                         placeholder: "Masukkan kata sandi Anda",
@@ -163,14 +158,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
-
                       const SizedBox(height: 16),
-
-                      // Remember Me & Forgot Password
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Remember Me
                           Row(
                             children: [
                               SizedBox(
@@ -200,8 +191,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ],
                           ),
-
-                          // Forgot Password
                           TextButton(
                             onPressed: () {
                               Navigator.pushNamed(
@@ -227,10 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 24),
-
-                      // Login Button
                       AppButton(
                         text: 'Masuk',
                         variant: ButtonVariant.primary,
@@ -239,73 +225,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: _handleLogin,
                         isFullWidth: true,
                       ),
-
-                      const SizedBox(height: 24),
-
-                      // Divider
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: colorScheme.outlineVariant,
-                              thickness: 1,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(
-                              'Atau',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: colorScheme.outlineVariant,
-                              thickness: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Social Login Buttons
-                      AppButton(
-                        text: 'Masuk dengan Google',
-                        variant: ButtonVariant.outline,
-                        size: ButtonSize.large,
-                        prefixIcon: FaIcon(
-                          FontAwesomeIcons.google,
-                          size: 18,
-                          color: colorScheme.onSurface,
-                        ),
-                        onPressed: () {},
-                        isFullWidth: true,
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      AppButton(
-                        text: 'Masuk dengan Apple',
-                        variant: ButtonVariant.outline,
-                        size: ButtonSize.large,
-                        prefixIcon: FaIcon(
-                          FontAwesomeIcons.apple,
-                          size: 18,
-                          color: colorScheme.onSurface,
-                        ),
-                        onPressed: () {},
-                        isFullWidth: true,
-                      ),
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 32),
-
-                // Sign Up Link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -334,8 +257,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 16),
               ],
             ),
           ),

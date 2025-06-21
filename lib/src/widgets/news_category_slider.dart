@@ -57,7 +57,6 @@ class _NewsCategorySliderState extends State<NewsCategorySlider> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: newsCategories.length,
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         itemBuilder: (context, index) {
           final category = newsCategories[index];
           final bool isSelected = category['value'] == _selectedCategoryValue;

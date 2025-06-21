@@ -1,15 +1,19 @@
-import 'package:flashfeed/src/presentation/pages/articel_detail_screen.dart';
-import 'package:flashfeed/src/presentation/pages/explore_screen.dart';
-import 'package:flashfeed/src/presentation/pages/auth/forgot_password_screen.dart';
-import 'package:flashfeed/src/presentation/pages/home_screen.dart';
-import 'package:flashfeed/src/presentation/pages/introduction_screen.dart';
-import 'package:flashfeed/src/presentation/pages/auth/login_screen.dart';
-import 'package:flashfeed/src/presentation/pages/not_found_screen.dart';
-import 'package:flashfeed/src/presentation/pages/profile_screen.dart';
-import 'package:flashfeed/src/presentation/pages/auth/register_screen.dart';
-import 'package:flashfeed/src/presentation/pages/saved_screen.dart';
-import 'package:flashfeed/src/presentation/pages/splash_screen.dart';
-import 'package:flashfeed/src/presentation/pages/trending_screen.dart';
+import 'package:flashfeed/src/core/utils/auth_wrapper.dart';
+import 'package:flashfeed/src/pages/my_news_screen.dart';
+import 'package:flashfeed/src/pages/news_details_screen.dart';
+import 'package:flashfeed/src/pages/create_news_screen.dart';
+import 'package:flashfeed/src/pages/edit_news_screen.dart';
+import 'package:flashfeed/src/pages/explore_screen.dart';
+import 'package:flashfeed/src/pages/auth/forgot_password_screen.dart';
+import 'package:flashfeed/src/pages/main_screen.dart';
+import 'package:flashfeed/src/pages/introduction_screen.dart';
+import 'package:flashfeed/src/pages/auth/login_screen.dart';
+import 'package:flashfeed/src/pages/not_found_screen.dart';
+import 'package:flashfeed/src/pages/profile_screen.dart';
+import 'package:flashfeed/src/pages/auth/register_screen.dart';
+import 'package:flashfeed/src/pages/saved_screen.dart';
+import 'package:flashfeed/src/pages/splash_screen.dart';
+import 'package:flashfeed/src/pages/trending_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -24,6 +28,9 @@ class AppRoutes {
   static const explore = '/explore';
   static const trending = '/trending';
   static const saved = '/saved';
+  static const myArticles = "/myArticles";
+  static const createArticle = "/createArticle";
+  static const updateArticle = "/updateArticle";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -38,7 +45,9 @@ class AppRoutes {
       case forgotPassword:
         return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
       case home:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(
+          builder: (_) => AuthWrapper(child: MainScreen()),
+        );
       case articleDetail:
         final articleId = settings.arguments as String;
         return MaterialPageRoute(
@@ -52,7 +61,15 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => TrendingScreen());
       case saved:
         return MaterialPageRoute(builder: (_) => SavedScreen());
-
+      case myArticles:
+        return MaterialPageRoute(builder: (_) => MyNewsScreen());
+      case createArticle:
+        return MaterialPageRoute(builder: (_) => CreateNewsScreen());
+      case updateArticle:
+        final articleId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => UpdateNewsScreen(articleId: articleId),
+        );
       default:
         return MaterialPageRoute(builder: (_) => NotFoundScreen());
     }

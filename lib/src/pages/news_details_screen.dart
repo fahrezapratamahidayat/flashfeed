@@ -1,6 +1,12 @@
 import 'dart:ui';
+import 'package:flashfeed/src/models/news_response.dart';
+import 'package:flashfeed/src/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flashfeed/src/core/services/news_service.dart';
+import 'package:flashfeed/src/widgets/shimmer_effects.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ArticleDetailPage extends StatefulWidget {
   final String articleId;
@@ -15,154 +21,191 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   bool _isBookmarked = false;
   bool _isLiked = false;
   bool _showComments = false;
+  bool _isLoading = true;
+  bool _hasError = false;
+  String _errorMessage = '';
+  bool _isBookmarkLoading = false;
 
-  final Map<String, dynamic> _articleData = {
-    'id': 'artikel-123',
-    'title': 'Pecco Bagnaia Berhasil Pertahankan Gelar Juara Dunia MotoGP 2023',
-    'category': 'MotoGP',
-    'publishedAt': '27 Nov 2023',
-    'readTime': '6 menit',
-    'author': {
-      'name': 'Budi Santoso',
-      'title': 'Jurnalis Olahraga',
-      'avatar': 'https://randomuser.me/api/portraits/men/32.jpg',
-      'followers': 5243,
+  final NewsService _newsService = NewsService();
+  NewsArticle? _article;
+  List<NewsArticle> _relatedArticles = [];
+
+  final List<Map<String, dynamic>> _comments = [
+    {
+      'id': 'comment-1',
+      'user': {
+        'name': 'Ahmad Ridwan',
+        'avatar': 'https://randomuser.me/api/portraits/men/42.jpg',
+      },
+      'content': 'Artikel ini sangat informatif! Terima kasih atas ulasannya.',
+      'timestamp': '2 jam yang lalu',
+      'likes': 24,
     },
-    'imageUrl':
-        'https://images.unsplash.com/photo-1562402082-05a4e888ca96?q=80&w=1121&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'isTrending': true,
-    'views': 24580,
-    'likes': 2568,
-    'commentsCount': 128,
-    'tags': ['MotoGP', 'Bagnaia', 'Ducati'],
-    'content': '''
-Pembalap Ducati, Francesco Bagnaia, berhasil mempertahankan gelar juara dunia MotoGP setelah finis di posisi kelima pada balapan pamungkas musim 2023 di Sirkuit Ricardo Tormo, Valencia, Minggu (26/11/2023). Bagnaia mengamankan gelar juara dunia keduanya secara beruntun setelah rival terdekatnya, Jorge Martin, terjatuh pada lap ketujuh.
-
-Bagnaia menjadi pembalap Italia pertama yang berhasil memenangkan dua gelar juara dunia MotoGP secara beruntun setelah Valentino Rossi. Pencapaian ini semakin istimewa karena diraih di tengah persaingan yang sangat ketat sepanjang musim dengan Jorge Martin dari tim Pramac Racing.
-
-"Ini adalah perasaan yang luar biasa. Musim ini sangat sulit, saya dan tim bekerja sangat keras. Saya ingin berterima kasih kepada semua orang yang mendukung saya," kata Bagnaia usai balapan.
-
-Balapan di Valencia sendiri diwarnai dengan insiden dramatis saat Jorge Martin terjatuh di Tikungan 4 pada lap ketujuh. Martin, yang memulai balapan dengan keunggulan 14 poin di belakang Bagnaia dalam klasemen, terpaksa merelakan peluangnya untuk menjadi juara dunia setelah insiden tersebut.
-
-"Saya mencoba memberikan yang terbaik, tapi mungkin saya terlalu memaksakan diri. Ini adalah pelajaran berharga untuk karier saya," ujar Martin dengan kecewa.
-
-Sementara itu, balapan di Valencia dimenangkan oleh pembalap Gresini Racing, Alex Marquez, diikuti oleh Johann Zarco (LCR Honda) di posisi kedua dan Brad Binder (KTM Factory Racing) di posisi ketiga.
-
-Kemenangan Bagnaia musim ini semakin memperkuat dominasi Ducati dalam kejuaraan MotoGP. Pabrikan Italia tersebut juga telah mengamankan gelar juara konstruktor dan tim, menjadikan 2023 sebagai tahun yang sempurna bagi mereka.
-
-Dengan dua gelar juara dunia di usianya yang masih 26 tahun, Bagnaia kini masuk dalam jajaran pembalap elit dalam sejarah MotoGP. Banyak pengamat memprediksi bahwa pembalap Italia ini akan menjadi kekuatan dominan dalam beberapa tahun ke depan.
-
-Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di Qatar. Bagnaia akan kembali membela Ducati dan bertekad untuk meraih gelar juara dunia ketiga secara beruntun.
-''',
-    'comments': [
-      {
-        'id': 'comment-1',
-        'user': {
-          'name': 'Ahmad Ridwan',
-          'avatar': 'https://randomuser.me/api/portraits/men/42.jpg',
-        },
-        'content':
-            'Bagnaia memang pantas jadi juara! Konsistensinya sepanjang musim luar biasa.',
-        'timestamp': '2 jam yang lalu',
-        'likes': 24,
+    {
+      'id': 'comment-2',
+      'user': {
+        'name': 'Siti Aminah',
+        'avatar': 'https://randomuser.me/api/portraits/women/56.jpg',
       },
-      {
-        'id': 'comment-2',
-        'user': {
-          'name': 'Siti Aminah',
-          'avatar': 'https://randomuser.me/api/portraits/women/56.jpg',
-        },
-        'content':
-            'Kasihan Martin, padahal tinggal selangkah lagi menuju gelar juara dunia pertamanya.',
-        'timestamp': '4 jam yang lalu',
-        'likes': 18,
+      'content':
+          'Saya setuju dengan pendapat penulis. Sangat relevan dengan kondisi saat ini.',
+      'timestamp': '4 jam yang lalu',
+      'likes': 18,
+    },
+    {
+      'id': 'comment-3',
+      'user': {
+        'name': 'Rudi Hermawan',
+        'avatar': 'https://randomuser.me/api/portraits/men/61.jpg',
       },
-      {
-        'id': 'comment-3',
-        'user': {
-          'name': 'Rudi Hermawan',
-          'avatar': 'https://randomuser.me/api/portraits/men/61.jpg',
-        },
-        'content':
-            'Ducati mendominasi musim ini, tapi tahun depan Honda dan Yamaha pasti akan comeback!',
-        'timestamp': '6 jam yang lalu',
-        'likes': 12,
-      },
-      {
-        'id': 'comment-4',
-        'user': {
-          'name': 'Dewi Lestari',
-          'avatar': 'https://randomuser.me/api/portraits/women/22.jpg',
-        },
-        'content':
-            'Balapan terakhir musim ini sangat dramatis! Tidak sabar menunggu musim depan.',
-        'timestamp': '8 jam yang lalu',
-        'likes': 9,
-      },
-      {
-        'id': 'comment-5',
-        'user': {
-          'name': 'Bima Sakti',
-          'avatar': 'https://randomuser.me/api/portraits/men/79.jpg',
-        },
-        'content':
-            'Saya sudah mendukung Bagnaia sejak di Moto2. Senang melihat perkembangannya sampai bisa menjadi juara dunia MotoGP dua kali berturut-turut.',
-        'timestamp': '10 jam yang lalu',
-        'likes': 32,
-      },
-    ],
-    'relatedArticles': [
-      {
-        'id': 'artikel-124',
-        'title':
-            'Marc Marquez Resmi Bergabung dengan Ducati Gresini untuk Musim 2024',
-        'imageUrl':
-            'https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        'category': 'MotoGP',
-        'date': '2 hari yang lalu',
-      },
-      {
-        'id': 'artikel-125',
-        'title':
-            'Jadwal Lengkap MotoGP 2024: Indonesia Kembali Masuk Kalender Balapan',
-        'imageUrl':
-            'https://images.unsplash.com/photo-1720958357699-df1a05ebe009?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        'category': 'MotoGP',
-        'date': '3 hari yang lalu',
-      },
-    ],
-  };
+      'content':
+          'Menarik sekali perspektifnya. Bisa tolong jelaskan lebih lanjut tentang poin ketiga?',
+      'timestamp': '6 jam yang lalu',
+      'likes': 12,
+    },
+  ];
 
-  void _toggleBookmark() {
+  @override
+  void initState() {
+    super.initState();
+    _loadArticle();
+  }
+
+  Future<void> _loadArticle() async {
     setState(() {
-      _isBookmarked = !_isBookmarked;
+      _isLoading = true;
+      _hasError = false;
+      _errorMessage = '';
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          _isBookmarked ? 'Artikel disimpan' : 'Artikel dihapus dari simpanan',
+    try {
+      final article = await _newsService.fetchArticleById(widget.articleId);
+      final relatedArticles = await _newsService.fetchRelatedArticles(
+        article.category,
+      );
+
+      if (mounted) {
+        setState(() {
+          _article = article;
+          _relatedArticles = relatedArticles;
+        });
+      }
+
+      final isAuthenticated = Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).isAuthenticated;
+
+      if (isAuthenticated) {
+        try {
+          final isBookmarked = await _newsService.checkBookmarkStatus(
+            widget.articleId,
+          );
+          if (mounted) {
+            setState(() {
+              _isBookmarked = isBookmarked;
+            });
+          }
+        } catch (e) {
+          if (mounted) {
+            setState(() {
+              _isBookmarked = false;
+            });
+          }
+          debugPrint('Error checking bookmark status: ${e.toString()}');
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+          _errorMessage = e.toString().replaceFirst("Exception: ", "");
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _toggleBookmark() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (!authProvider.isAuthenticated) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Anda harus login untuk menyimpan artikel'),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
         ),
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 2),
-        action: SnackBarAction(
-          label: 'OK',
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-      ),
-    );
+      );
+      return;
+    }
+
+    setState(() {
+      _isBookmarkLoading = true;
+    });
+
+    try {
+      bool success;
+      if (_isBookmarked) {
+        // Hapus bookmark
+        success = await _newsService.removeBookmark(widget.articleId);
+        if (success && mounted) {
+          setState(() {
+            _isBookmarked = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Artikel dihapus dari simpanan'),
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      } else {
+        // Tambah bookmark
+        success = await _newsService.addBookmark(widget.articleId);
+        if (success && mounted) {
+          setState(() {
+            _isBookmarked = true;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Artikel disimpan'),
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceFirst("Exception: ", "")),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isBookmarkLoading = false;
+        });
+      }
+    }
   }
 
   void _toggleLike() {
     setState(() {
       _isLiked = !_isLiked;
-      if (_isLiked) {
-        _articleData['likes']++;
-      } else {
-        _articleData['likes']--;
-      }
     });
   }
 
@@ -187,6 +230,73 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    if (_isLoading) {
+      return const ShimmerNewsDetail();
+    }
+
+    if (_hasError) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Error'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline_rounded,
+                  color: Colors.redAccent,
+                  size: 64,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Gagal memuat artikel',
+                  style: theme.textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _errorMessage,
+                  style: theme.textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: _loadArticle,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Coba Lagi'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (_article == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Artikel Tidak Ditemukan'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        body: Center(
+          child: Text(
+            'Artikel tidak ditemukan',
+            style: theme.textTheme.titleMedium,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: CustomScrollView(
@@ -210,7 +320,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                   Hero(
                     tag: 'article-image-${widget.articleId}',
                     child: Image.network(
-                      _articleData['imageUrl'],
+                      _article!.imageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
                         color: colorScheme.surfaceContainerHighest,
@@ -271,7 +381,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            _articleData['category'],
+                            _article!.category,
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -281,7 +391,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          _articleData['title'],
+                          _article!.title,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -291,11 +401,10 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
-
                         const SizedBox(height: 12),
                         Row(
                           children: [
-                            if (_articleData['isTrending']) ...[
+                            if (_article!.isTrending) ...[
                               const Icon(
                                 Icons.trending_up_rounded,
                                 color: Colors.white,
@@ -312,7 +421,10 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                               _buildDot(),
                             ],
                             Text(
-                              _articleData['publishedAt'],
+                              DateFormat(
+                                'dd MMM yyyy',
+                                'id_ID',
+                              ).format(_article!.createdAt),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400,
@@ -320,7 +432,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                             ),
                             _buildDot(),
                             Text(
-                              '${_articleData['readTime']} baca',
+                              '${_article!.readTime} baca',
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400,
@@ -345,10 +457,13 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: _buildBlurredIconButton(
-                  icon: _isBookmarked
+                  icon: _isBookmarkLoading
+                      ? null
+                      : _isBookmarked
                       ? Icons.bookmark_rounded
                       : Icons.bookmark_border_rounded,
-                  onPressed: _toggleBookmark,
+                  onPressed: _isBookmarkLoading ? null : _toggleBookmark,
+                  isLoading: _isBookmarkLoading,
                 ),
               ),
               Padding(
@@ -378,9 +493,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                       CircleAvatar(
                         radius: 24,
                         backgroundColor: colorScheme.primary,
-                        backgroundImage: NetworkImage(
-                          _articleData['author']['avatar'],
-                        ),
+                        backgroundImage: NetworkImage(_article!.author.avatar),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -388,13 +501,13 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _articleData['author']['name'],
+                              _article!.author.name,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              _articleData['author']['title'],
+                              _article!.author.title,
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: colorScheme.onSurfaceVariant,
                               ),
@@ -424,36 +537,37 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 24),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: List<Widget>.from(
-                      _articleData['tags'].map(
-                        (tag) => Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: colorScheme.surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Text(
-                            tag,
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w500,
+                  if (_article!.tags.isNotEmpty)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List<Widget>.from(
+                        _article!.tags.map(
+                          (tag) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Text(
+                              tag,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                   const SizedBox(height: 24),
                   Text(
-                    _articleData['content'].split('\n').first,
+                    _article!.content.split('\n').first,
+                    textAlign: TextAlign.justify,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       height: 1.5,
@@ -462,7 +576,8 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    _articleData['content'],
+                    _article!.content,
+                    textAlign: TextAlign.justify,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       height: 1.7,
                       color: colorScheme.onSurface.withValues(alpha: 0.9),
@@ -478,14 +593,14 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                             icon: _isLiked
                                 ? Icons.thumb_up_alt
                                 : Icons.thumb_up_alt_outlined,
-                            label: _formatNumber(_articleData['likes']),
+                            label: '0',
                             onPressed: _toggleLike,
                             isActive: _isLiked,
                           ),
                           const SizedBox(width: 16),
                           _buildInteractionButton(
                             icon: Icons.comment_outlined,
-                            label: _formatNumber(_articleData['commentsCount']),
+                            label: _comments.length.toString(),
                             onPressed: _toggleComments,
                             isActive: _showComments,
                           ),
@@ -512,7 +627,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Komentar (${_articleData['commentsCount']})',
+                            'Komentar (${_comments.length})',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -562,32 +677,10 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                           ),
                           const SizedBox(height: 24),
                           ...List.generate(
-                            _articleData['comments'].length,
-                            (index) => _buildCommentItem(
-                              context,
-                              _articleData['comments'][index],
-                            ),
+                            _comments.length,
+                            (index) =>
+                                _buildCommentItem(context, _comments[index]),
                           ),
-                          const SizedBox(height: 8),
-                          if (_articleData['commentsCount'] >
-                              _articleData['comments'].length)
-                            Center(
-                              child: TextButton.icon(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.comment_outlined,
-                                  size: 16,
-                                  color: colorScheme.primary,
-                                ),
-                                label: Text(
-                                  'Lihat semua komentar',
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    color: colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
                         ],
                       ),
                     ),
@@ -602,25 +695,32 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ...List.generate(
-                    _articleData['relatedArticles'].length,
-                    (index) => Column(
-                      children: [
-                        _buildRelatedArticleItem(
-                          context,
-                          title:
-                              _articleData['relatedArticles'][index]['title'],
-                          imageUrl:
-                              _articleData['relatedArticles'][index]['imageUrl'],
-                          category:
-                              _articleData['relatedArticles'][index]['category'],
-                          date: _articleData['relatedArticles'][index]['date'],
+                  if (_relatedArticles.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Tidak ada artikel terkait',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
                         ),
-                        if (index < _articleData['relatedArticles'].length - 1)
-                          const SizedBox(height: 16),
-                      ],
+                      ),
+                    )
+                  else
+                    ...List.generate(
+                      _relatedArticles.length,
+                      (index) => Column(
+                        children: [
+                          _buildRelatedArticleItem(
+                            context,
+                            article: _relatedArticles[index],
+                          ),
+                          if (index < _relatedArticles.length - 1)
+                            const SizedBox(height: 16),
+                        ],
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 40),
                 ],
               ),
@@ -631,18 +731,10 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
     );
   }
 
-  String _formatNumber(int number) {
-    if (number >= 1000000) {
-      return '${(number / 1000000).toStringAsFixed(1)}M';
-    } else if (number >= 1000) {
-      return '${(number / 1000).toStringAsFixed(1)}K';
-    }
-    return number.toString();
-  }
-
   Widget _buildBlurredIconButton({
-    required IconData icon,
-    required VoidCallback onPressed,
+    IconData? icon,
+    VoidCallback? onPressed,
+    bool isLoading = false,
   }) {
     final brightness = MediaQuery.platformBrightnessOf(context);
     final isDarkMode = brightness == Brightness.dark;
@@ -673,21 +765,32 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
               ),
             ],
           ),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            icon: Icon(
-              icon,
-              color: isDarkMode ? Colors.white : Colors.black,
-              size: 20,
-            ),
-            onPressed: onPressed,
-            tooltip: icon == Icons.arrow_back_rounded
-                ? 'Kembali'
-                : icon == Icons.bookmark_rounded ||
-                      icon == Icons.bookmark_border_rounded
-                ? 'Simpan'
-                : 'Bagikan',
-          ),
+          child: isLoading
+              ? const Center(
+                  child: SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ),
+                )
+              : IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    icon,
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    size: 20,
+                  ),
+                  onPressed: onPressed,
+                  tooltip: icon == Icons.arrow_back_rounded
+                      ? 'Kembali'
+                      : icon == Icons.bookmark_rounded ||
+                            icon == Icons.bookmark_border_rounded
+                      ? 'Simpan'
+                      : 'Bagikan',
+                ),
         ),
       ),
     );
@@ -748,10 +851,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
 
   Widget _buildRelatedArticleItem(
     BuildContext context, {
-    required String title,
-    required String imageUrl,
-    required String category,
-    required String date,
+    required NewsArticle article,
   }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -763,7 +863,9 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushReplacementNamed(context, '/article/${article.id}');
+        },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -771,7 +873,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
               width: 100,
               height: 100,
               child: Image.network(
-                imageUrl,
+                article.imageUrl,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
                   color: colorScheme.surfaceContainerHighest,
@@ -799,7 +901,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        category,
+                        article.category,
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: colorScheme.primary,
                           fontWeight: FontWeight.w500,
@@ -808,7 +910,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      title,
+                      article.title,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -817,7 +919,7 @@ Musim MotoGP 2024 akan dimulai pada Maret tahun depan dengan balapan pembuka di 
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      date,
+                      article.publishedAt,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),

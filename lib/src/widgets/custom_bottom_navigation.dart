@@ -21,7 +21,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         color: isDarkMode ? colorScheme.surface : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -29,8 +29,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
         border: Border(
           top: BorderSide(
             color: isDarkMode
-                ? colorScheme.surfaceVariant.withOpacity(0.1)
-                : colorScheme.outline.withOpacity(0.08),
+                ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.1)
+                : colorScheme.outline.withValues(alpha: 0.08),
             width: 1,
           ),
         ),
@@ -77,7 +77,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0,
             selectedItemColor: colorScheme.primary,
-            unselectedItemColor: colorScheme.onSurfaceVariant.withOpacity(0.7),
+            unselectedItemColor: colorScheme.onSurfaceVariant.withValues(
+              alpha: 0.7,
+            ),
             selectedFontSize: 12,
             unselectedFontSize: 12,
             selectedLabelStyle: const TextStyle(
@@ -113,13 +115,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
         child: Icon(
           icon,
           size: 24,
-          color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+          color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
         ),
       ),
       activeIcon: Container(
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: colorScheme.primary.withOpacity(0.12),
+          color: colorScheme.primary.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(activeIcon, size: 24, color: colorScheme.primary),
@@ -139,14 +141,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
       height: 36,
       decoration: BoxDecoration(
         color: isActive
-            ? colorScheme.primary.withOpacity(0.12)
+            ? colorScheme.primary.withValues(alpha: 0.12)
             : isDarkMode
-            ? colorScheme.surfaceVariant.withOpacity(0.3)
-            : colorScheme.surfaceVariant.withOpacity(0.2),
+            ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(18),
         border: isActive
             ? Border.all(
-                color: colorScheme.primary.withOpacity(0.3),
+                color: colorScheme.primary.withValues(alpha: 0.3),
                 width: 1.5,
               )
             : null,
@@ -156,7 +158,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         size: 20,
         color: isActive
             ? colorScheme.primary
-            : colorScheme.onSurfaceVariant.withOpacity(0.7),
+            : colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
       ),
     );
   }

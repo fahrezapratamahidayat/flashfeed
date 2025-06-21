@@ -46,7 +46,7 @@ class AppButton extends StatelessWidget {
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: _getForegroundColor(context),
+                      color: Colors.white,
                     ),
                   )
                 : Row(
@@ -64,6 +64,7 @@ class AppButton extends StatelessWidget {
                           style: TextStyle(
                             fontSize: _getFontSize(),
                             fontWeight: FontWeight.w500,
+                            color: Colors.white,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -126,7 +127,7 @@ class AppButton extends StatelessWidget {
   ButtonStyle _getButtonStyle(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = Theme.of(context).colorScheme;
-    final borderRadius = BorderRadius.circular(20.8);
+    final borderRadius = BorderRadius.circular(8);
 
     switch (variant) {
       case ButtonVariant.primary:

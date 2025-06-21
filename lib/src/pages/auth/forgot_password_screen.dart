@@ -1,7 +1,7 @@
-import 'package:flashfeed/src/presentation/widgets/button.dart';
-import 'package:flashfeed/src/presentation/widgets/text_field.dart';
-import 'package:flashfeed/src/presentation/widgets/spacing.dart';
-import 'package:flashfeed/src/presentation/widgets/app_logo.dart';
+import 'package:flashfeed/src/widgets/button.dart';
+import 'package:flashfeed/src/widgets/text_field.dart';
+import 'package:flashfeed/src/widgets/spacing.dart';
+import 'package:flashfeed/src/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -474,12 +474,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Step indicator
             _buildStepIndicator(),
 
             const SizedBox(height: 24),
 
-            // Main content
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -495,7 +493,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           const SizedBox(height: 24),
                         ],
 
-                        // Title
                         Text(
                           _stepTitles[_currentStep],
                           style: theme.textTheme.headlineSmall?.copyWith(
@@ -518,7 +515,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                         const SizedBox(height: 32),
 
-                        // Current step content
                         _buildCurrentStep(),
 
                         const SizedBox(height: 32),

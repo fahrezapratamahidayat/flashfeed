@@ -223,7 +223,7 @@ class _PinInputFieldState extends State<PinInputField> {
                         color: _focusNodes[digitIndex].hasFocus
                             ? activeColor
                             : _controllers[digitIndex].text.isNotEmpty
-                            ? activeColor.withOpacity(0.7)
+                            ? activeColor.withValues(alpha: 0.7)
                             : widget.errorText != null
                             ? errorColor
                             : inactiveColor,

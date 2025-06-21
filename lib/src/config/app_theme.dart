@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Extension untuk memudahkan manipulasi warna
 extension ColorExtension on Color {
   Color withValues({double? alpha, double? lightness, double? saturation}) {
     final HSLColor hsl = HSLColor.fromColor(this);
